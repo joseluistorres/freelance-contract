@@ -19,9 +19,18 @@ Any additional development needed above and beyond what we have agreed to here m
 
 1.04 Timeline
 ------------
-This project is scheduled to begin <%= config['start_date'] %> and will last <%= config['project_duration'] %>.
-Below is the milestone schedule:
+This project is scheduled to begin <%= config['start_date'] %> and will last <%= "#{config['project_duration']} #{config['project_time_unit']}" %>.
+Below is the milestone schedule (in <%= config['project_time_unit'] %>):
 
 * [MILESTONE NAME, # DAYS REQUIRED]
+
+<% if config['milestones'] %>
+  <% config['milestones'].each_with_index do |content, index| %>
+    <%= "1.04.#{(index + 1).to_s.rjust(2, '0')}: #{content.rjust(80, " ")}" %>
+  <% end %>
+
+<% else %>
+  <%= "None" %>
+<% end %>
 
 This contract will be declared complete when all work, within scope, is complete and has been paid in full.
