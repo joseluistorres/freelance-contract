@@ -1,0 +1,26 @@
+---
+amendments:
+  -
+  -
+
+billing_deposit_amount:
+billing_hourly_rate:
+
+client_company_name:
+client_individual_name:
+
+developer_company_name:
+developer_email:
+developer_legal_jurisdiction:
+developer_name:
+developer_phone:
+
+project_duration:
+project_milestones:
+  -
+  -
+project_name:
+project_start_date:
+project_time_unit:
+# Note that the following items are arrays: amendments and project_milestones
+# Array items should be formatted as yaml arrays

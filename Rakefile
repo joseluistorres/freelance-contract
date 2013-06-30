@@ -3,7 +3,14 @@ require 'pathname'
 require 'erb'
 require 'yaml'
 
-config = YAML.load_file(File.expand_path 'config.yml')
+if File.exists?('config.yml')
+  config = YAML.load_file(File.expand_path 'config.yml')
+else
+  puts "Run `rake init` && `mv config.yml.example config.yml`"
+  puts "Then fill in values as needed in config.yml"
+  exit(1)
+end
+
 
 def compile_pdf(config)
   config = config
@@ -22,11 +29,11 @@ def compile_pdf(config)
 
       process_erb(basename, file_markdown, config)
       system "markdown 'markdown/#{file_markdown}' > 'html/#{file_html}'"
-      files << "'html/#{file_html}' " unless basename == '00-Title Page.md.erb'
+      files << "'html/#{file_html}' " unless basename == '00-Title_Page.md.erb'
     # end
   end
 
-  html_doc =  "htmldoc --book --titlefile 'html/00-Title Page.html'"
+  html_doc =  "htmldoc --book --titlefile 'html/00-Title_Page.html'"
   html_doc += " -f #{ contract_output_name }.pdf #{files}"
 
   system html_doc
@@ -57,7 +64,6 @@ def post_hook
   system "rm -rf html"
 end
 
-task :default => [:view]
 
 task :compile do
   compile_pdf(config)
@@ -66,3 +72,20 @@ end
 task :view  => [:compile] do
   `open *.pdf`
 end
+
+task :init do
+  terms = FileList["pages/*"].map do |file|
+    content = File.open(file).read
+    content.scan(/config\['(\w+)'\]/)
+  end.flatten.uniq.sort
+
+  terms << ""
+  config_example = "---\n"
+  config_example += terms.join(":\n")
+  config_example += "# Note that the following items are arrays: amendments and project_milestones\n"
+  config_example += "# Array items should be formatted as yaml arrays"
+
+  File.write("config.yml.example", config_example)
+end
+
+task :default => [:view]
