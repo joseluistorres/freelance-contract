@@ -38,7 +38,7 @@ def compile_pdf(config)
 
   system html_doc
 
-  system "shasum #{contract_output_name}.pdf > #{contract_output_name}.sha"
+  system "shasum #{contract_output_name}.pdf > #{contract_output_name}.sha1"
 
 ensure
   post_hook
@@ -54,7 +54,7 @@ end
 def pre_hook(contract_output_name)
   contract_output_name = contract_output_name
   system "rm *.pdf &2> /dev/null"
-  system "rm *.sha &2> /dev/null"
+  system "rm *.sha1 &2> /dev/null"
   system "mkdir html" unless Dir.exists?("html")
   system "mkdir markdown" unless Dir.exists?("markdown")
 end
