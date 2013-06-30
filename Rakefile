@@ -6,7 +6,7 @@ require 'yaml'
 if File.exists?('config.yml')
   config = YAML.load_file(File.expand_path 'config.yml')
 else
-  puts "Run `rake init` && `mv config.yml.example config.yml`"
+  puts "Run `mv config.yml.example config.yml`"
   puts "Then fill in values as needed in config.yml"
   exit(1)
 end
