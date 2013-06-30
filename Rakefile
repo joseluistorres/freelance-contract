@@ -53,8 +53,12 @@ def post_hook
   system "rm -rf html"
 end
 
-task :default => [:compile]
+task :default => [:view]
 
 task :compile do
   compile_pdf(config)
+end
+
+task :view  => [:compile] do
+  `open contract.pdf`
 end
