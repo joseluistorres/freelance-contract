@@ -7,7 +7,9 @@ config = YAML.load_file(File.expand_path 'config.yml')
 
 def compile_pdf(config)
   config = config
-  pre_hook
+  contract_output_name = "Contract-#{Time.now.strftime('%Y-%m-%d-%H:%M:%S')}"
+
+  pre_hook(contract_output_name)
 
   files = ""
 
@@ -25,10 +27,11 @@ def compile_pdf(config)
   end
 
   html_doc =  "htmldoc --book --titlefile 'html/00-Title Page.html'"
-  html_doc += " -f contract.pdf #{files}"
+  html_doc += " -f #{ contract_output_name }.pdf #{files}"
 
   system html_doc
 
+  system "shasum #{contract_output_name}.pdf > #{contract_output_name}.sha"
 
 ensure
   post_hook
@@ -38,12 +41,13 @@ def process_erb(basename=basename, file_markdown=file_markdown, config)
 
   rendered_template = ERB.new(File.read("pages/#{basename}")).result(config.send(:binding))
   File.write("markdown/#{file_markdown}", rendered_template)
-  # system "erb 'pages/#{basename}' > 'markdown/#{file_markdown}'"
 
 end
 
-def pre_hook
-  system "rm contract.pdf" if File.exists?("./contract.pdf")
+def pre_hook(contract_output_name)
+  contract_output_name = contract_output_name
+  system "rm *.pdf &2> /dev/null"
+  system "rm *.sha &2> /dev/null"
   system "mkdir html" unless Dir.exists?("html")
   system "mkdir markdown" unless Dir.exists?("markdown")
 end
@@ -60,5 +64,5 @@ task :compile do
 end
 
 task :view  => [:compile] do
-  `open contract.pdf`
+  `open *.pdf`
 end

@@ -1,2 +1,3 @@
-config.*
-contract.pdf
+*.yml
+*.pdf
+*.sha

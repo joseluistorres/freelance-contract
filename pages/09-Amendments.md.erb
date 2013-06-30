@@ -3,8 +3,7 @@
 
 <% if config['amendments'] %>
   <% config['amendments'].each_with_index do |amendment, index| %>
-    <%= "8.#{index.to_s.rjust(2, '0')}\n" %>
-    <%= amendment %>
+    <%= "8.#{(index + 1).to_s.rjust(2, '0')}: #{amendment}" %>
   <% end %>
 
 <% else %>

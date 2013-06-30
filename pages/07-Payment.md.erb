@@ -1,4 +1,4 @@
-6. Payments
+6. Payments & Billing
 ========
 
 6.01 Summary
@@ -12,10 +12,31 @@ We bill every other week on Friday and all invoices are payable upon receipt.
 
 A deposit of $ <%= config['deposit_amount'] %> is due up front and will be subtracted from the last invoice.
 
-6.03 Late Payments
+6.03 Discounts
+--------------
+10 %  Pre-payment discount. This applies when client pays the full amount of the contract before we begin working on the project.
+2  %  Discount when payment is made within 24 hours from when we send out the invoice.
+
+Discounts cannot be combined.
+
+6.04 Late Payments
 -------------------
 Any payments not received within 7 days will halt work until the payment is received. If payment is late twice during the project, we retain the right to ask for prepayment of hours or to end the project, whichever we deem more fitting for the situation.
 
-6.04 Terminating Contract
+Late payments will incur an interest fee of 10% of the outstanding balance per month.
+
+6.05 Collections
+------------------
+If required to pursue collection actions, you're required to pay our collection costs, attorney fees, and court costs.
+
+6.06 Billing
+------------------
+All time spent on client work, including coding, systems administration, meetings, project management, planning sessions, communications, etc. will be billed at the hourly rate of <%= config['hourly_rate'] %>, unless otherwise stated in this contract or amendments.
+
+Work will be billed and invoiced in industry standard tenths (1/10) of an hour increments, rounded up.
+
+In order to ensure transparency with our clients, we provide an itemized account of all time billed.
+
+6.07 Terminating Contract
 --------------------------
 If either party chooses to end the project, it must be done in writing. Please keep in mind that the deposit will be forfeit and any work that has been paid for up to that point will be turned over to you.
