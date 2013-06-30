@@ -53,4 +53,8 @@ def post_hook
   system "rm -rf html"
 end
 
-compile_pdf(config)
+task :default => [:compile]
+
+task :compile do
+  compile_pdf(config)
+end
