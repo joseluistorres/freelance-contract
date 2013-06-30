@@ -22,6 +22,6 @@ Phone: <%= config['developer_phone'] %>
 Internal Code:
 --------------
 
-Checksum: <%=  Digest::SHA1.hexdigest(`cat pages/*`) %>
+Checksum: <%=  config['digest_pages'] %>
 
-Version:  <%= `git log | head -n1 | cut -d ' ' -f 2` %>
+Version:  <%= config['digest_git_sha'] %>

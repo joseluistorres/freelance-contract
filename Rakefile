@@ -2,10 +2,16 @@
 require 'pathname'
 require 'erb'
 require 'yaml'
+require 'yaml/dbm'
+require 'json'
 require 'digest/sha1'
 
 if File.exists?('config.yml')
   config = YAML.load_file(File.expand_path 'config.yml')
+  config['digest_pages'] = Digest::SHA1.hexdigest(`cat pages/*`)
+  config['digest_git_sha'] = `git log | head -n1 | cut -d ' ' -f 2`.chomp
+  config['filename'] = "Contract-#{Time.now.strftime('%Y-%m-%d-%H:%M:%S')}"
+  config['date'] = Time.now.strftime('%Y-%m-%d-%H:%M:%S')
 else
   puts "Run `mv config.yml.example config.yml`"
   puts "Then fill in values as needed in config.yml"
@@ -40,7 +46,21 @@ def compile_pdf(config)
   system html_doc
 
   system "shasum #{contract_output_name}.pdf > #{contract_output_name}.sha1"
+  config['digest_pdf'] = `shasum #{contract_output_name}.pdf`.chomp.split(" ")[0]
 
+  require'pry';binding.pry
+  puts @db[config['digest_pdf']] = config
+
+  File.open(File.expand_path('log/contract.log'), 'a' ) do |f|
+    entry = config['digest_pdf']
+    entry << ": "
+    entry << config.to_json
+    entry << "\n"
+    f.write entry
+  end
+
+
+  # puts config.to_json
 ensure
   post_hook
 end
@@ -53,16 +73,36 @@ def process_erb(basename=basename, file_markdown=file_markdown, config)
 end
 
 def pre_hook(contract_output_name)
+  check_for_dependencies
   contract_output_name = contract_output_name
   system "rm *.pdf &2> /dev/null"
   system "rm *.sha1 &2> /dev/null"
-  system "mkdir html" unless Dir.exists?("html")
-  system "mkdir markdown" unless Dir.exists?("markdown")
+  %w[html markdown log].each do |dir|
+    system "mkdir #{dir}" unless Dir.exists?(dir)
+  end
+  `touch log/contract.log` unless File.exists?('log/contract.log')
+  db_filename = File.expand_path('log/contract.yaml_dbm')
+  if File.exists?(db_filename + ".db")
+    @db = YAML::DBM.open(db_filename)
+  else
+    @db = YAML::DBM.new(db_filename)
+  end
 end
 
+def check_for_dependencies
+  %w[shasum markdown htmldoc].each do |tool|
+    unless `which #{tool}`
+      puts "Please install #{tool}"
+      exit(1)
+    end
+  end
+end
 def post_hook
-  system "rm -rf markdown"
-  system "rm -rf html"
+  %w[html markdown].each do |dir|
+    system "rm -rf #{dir} &2> /dev/null"
+  end
+
+  @db.close if @db
 end
 
 
