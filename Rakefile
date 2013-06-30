@@ -2,6 +2,7 @@
 require 'pathname'
 require 'erb'
 require 'yaml'
+require 'digest/sha1'
 
 if File.exists?('config.yml')
   config = YAML.load_file(File.expand_path 'config.yml')

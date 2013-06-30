@@ -8,10 +8,20 @@ Client: *<%= config['client_company_name'] %>*
 
 Project: *<%= config['project_name'] %>*
 
-#### Contact Info:
+Contact Info:
+-------------
 
 Name: <%= config['developer_name'] %>
 
 Email: <%= config['developer_email'] %>
 
 Phone: <%= config['developer_phone'] %>
+
+
+
+Internal Code:
+--------------
+
+Checksum: <%=  Digest::SHA1.hexdigest(`cat pages/*`) %>
+
+Version:  <%= `git log | head -n1 | cut -d ' ' -f 2` %>
