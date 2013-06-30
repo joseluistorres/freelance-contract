@@ -1,17 +1,56 @@
 #!/usr/bin/env ruby
+require 'pathname'
+require 'erb'
+require 'yaml'
 
-system "rm contract.pdf" if File.exists?("./contract.pdf")
-system "mkdir html"
+config = YAML.load_file(File.expand_path 'config.yml')
 
-files = String.new
+def compile_pdf(config)
+  config = config
+  pre_hook
 
-Dir.new("./pages").each do |file|
-  if file.include? ".md"
-    system "markdown 'pages/#{file}' > 'html/#{file}.html'"
-    files << "'html/#{file}.html' " unless file == '00-Title Page.md'
+  files = ""
+
+  Dir.glob("./pages/*.md*").each do |file|
+    file = Pathname.new(file)
+    basename = file.basename.to_s
+    # if file.include? ".md"
+      file_markdown = basename.gsub(/.erb$/i, '')
+      file_html = basename.gsub(/.md.erb$/i, '.html')
+
+      process_erb(basename, file_markdown, config)
+      system "markdown 'markdown/#{file_markdown}' > 'html/#{file_html}'"
+      files << "'html/#{file_html}' " unless basename == '00-Title Page.md.erb'
+    # end
   end
+
+  html_doc =  "htmldoc --book --titlefile 'html/00-Title Page.html'"
+  html_doc += " -f contract.pdf #{files}"
+
+  system html_doc
+
+
+ensure
+  post_hook
 end
 
-system "htmldoc --book --titlefile 'html/00-Title Page.md.html' -f contract.pdf #{files}"
+def process_erb(basename=basename, file_markdown=file_markdown, config)
 
-system "rm -rf html"
+  rendered_template = ERB.new(File.read("pages/#{basename}")).result(config.send(:binding))
+  File.write("markdown/#{file_markdown}", rendered_template)
+  # system "erb 'pages/#{basename}' > 'markdown/#{file_markdown}'"
+
+end
+
+def pre_hook
+  system "rm contract.pdf" if File.exists?("./contract.pdf")
+  system "mkdir html" unless Dir.exists?("html")
+  system "mkdir markdown" unless Dir.exists?("markdown")
+end
+
+def post_hook
+  system "rm -rf markdown"
+  system "rm -rf html"
+end
+
+compile_pdf(config)
