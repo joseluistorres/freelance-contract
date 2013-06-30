@@ -1,3 +1,4 @@
 *.yml
 *.pdf
 *.sha*
+log*
