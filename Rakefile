@@ -97,10 +97,11 @@ end
 
 def check_for_dependencies
   %w[shasum markdown htmldoc].each do |tool|
-    unless `which #{tool}`
+    unless system( "which #{tool} > /dev/null" )
       puts "Please install #{tool}"
-      exit(1)
+      missing_dependency = true
     end
+    exit(1) if missing_dependency
   end
 end
 def post_hook
