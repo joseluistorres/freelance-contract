@@ -10,14 +10,11 @@ We are sure you understand how important it is that you pay the invoices that we
 
 We bill every other week on Friday and all invoices are payable upon receipt.
 
-A deposit of $ <%= config['billing_deposit_amount'] %> is due up front and will be subtracted from the last invoice.
+A deposit of $ <%= "%.2f" % (config['billing_total_estimate'] * config['billing_deposit_percentage'] ) %> is due up front and will be subtracted from the last invoice.
 
 6.03 Discounts
 --------------
 10 %  Pre-payment discount. This applies when client pays the full amount of the contract before we begin working on the project.
-2  %  Discount when payment is made within 24 hours from when we send out the invoice.
-
-Discounts cannot be combined.
 
 6.04 Late Payments
 -------------------
@@ -31,7 +28,7 @@ If required to pursue collection actions, you're required to pay our collection 
 
 6.06 Billing
 ------------------
-All time spent on client work, including coding, systems administration, meetings, project management, planning sessions, communications, etc. will be billed at the hourly rate of <%= config['billing_hourly_rate'] %>, unless otherwise stated in this contract or amendments.
+All time spent on client work, including coding, systems administration, meetings, project management, planning sessions, communications, etc. will be billed at the hourly rate of $ <%= config['billing_hourly_rate'] %>, unless otherwise stated in this contract or amendments.
 
 Work will be billed and invoiced in industry standard tenths (1/10) of an hour increments, rounded up.
 

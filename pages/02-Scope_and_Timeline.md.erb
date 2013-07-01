@@ -19,7 +19,10 @@ Any additional development needed above and beyond what we have agreed to here m
 
 1.04 Timeline
 ------------
-This project is scheduled to begin <%= config['project_start_date'] %> and will last <%= "#{config['project_duration']} #{config['project_time_unit']}" %>.
+This project is scheduled to begin <%= config['project_start_date'] || "as soon as possible" %> and will last <%= "#{config['project_duration']} #{config['project_time_unit']}" %>.
+
+**Once we received a signed copy of this agreement and the deposit stipulated in Payment Section, work can begin.**
+
 Below is the milestone schedule (with # of <%= config['project_time_unit'] %> in parenthesis):
 
 <% if config['project_milestones'] %>

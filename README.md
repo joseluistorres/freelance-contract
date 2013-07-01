@@ -37,6 +37,7 @@ Credits
 Compiled from:
 https://github.com/ashedryden/freelance-contract
 https://github.com/theunraveler/Contract
+http://rosskimbarovsky.com/contracts-for-software-and-website-developers.pdf (CC-BY-SA)
 
 Anything not included in either of those contracts is an original contribution by yours truly.
 
